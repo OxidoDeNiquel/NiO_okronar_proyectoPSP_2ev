@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -37,31 +38,42 @@ class MarcoServidor extends JFrame implements Runnable {
 		Thread miHilo = new Thread(this);
 		miHilo.start();
 
-	}
+	} 
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		try {
 			ServerSocket servidor = new ServerSocket(1234);
+			
+			String nick, ip, mensaje;
+			
+			PaqueteEnvio paquete_recibido;
+			
 
 			while (true) {
 
 				Socket misocket = servidor.accept();
 
-				DataInputStream flujoEntrada = new DataInputStream(misocket.getInputStream());
-				String mensajeTexto = flujoEntrada.readUTF();
-
-				areatexto.append("\n" + mensajeTexto);
-
+				ObjectInputStream paquete_datos = new ObjectInputStream(misocket.getInputStream());
+				
+				//montamos el objeto recibido
+				paquete_recibido = (PaqueteEnvio) paquete_datos.readObject();
+				
+				nick = paquete_recibido.getNick();
+				ip = paquete_recibido.getIp();
+				mensaje = paquete_recibido.getMensaje();
+				
+				areatexto.append("\n" + nick + ": " + mensaje + " para " + ip);
 				misocket.close();
 			}
 
-		} catch (IOException e) {
+		} catch (IOException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getMessage());
 		}
 	}
 
 	private JTextArea areatexto;
+	
 }
