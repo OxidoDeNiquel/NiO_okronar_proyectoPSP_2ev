@@ -32,6 +32,10 @@ class MarcoCliente extends JFrame {
 }
 
 class LaminaMarcoCliente extends JPanel implements Runnable {
+	
+	private JTextField campo1,nick,ip;
+	private JTextArea campochat;
+	private JButton miboton;
 
 	public LaminaMarcoCliente() {
 		nick = new JTextField(5);
@@ -62,9 +66,12 @@ class LaminaMarcoCliente extends JPanel implements Runnable {
 		@Override
 		public void actionPerformed(ActionEvent e) { 
 			
+			campochat.append("\n" + campo1.getText());
+			campo1.setText(null);
+			
 			try {
 				//Puente para comunicar con el servidor
-				Socket misocket = new Socket("192.168.56.1", 1234);
+				Socket misocket = new Socket("172.20.10.9", 1234);
 				//aqui tenemos la informacion completa del mensaje y el que lo manda en un objeto
 				PaqueteEnvio datos = new PaqueteEnvio();
 				
@@ -89,10 +96,6 @@ class LaminaMarcoCliente extends JPanel implements Runnable {
 			}
 		}
 	}
-
-	private JTextField campo1,nick,ip;
-	private JTextArea campochat;
-	private JButton miboton;
 	
 	//Run LaminaMarcoCliente
 	@Override
