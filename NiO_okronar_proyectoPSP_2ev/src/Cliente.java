@@ -15,9 +15,7 @@ public class Cliente {
 		// TODO Auto-generated method stub
 		MarcoCliente mimarco = new MarcoCliente();
 		mimarco.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 	}
-
 }
 
 class MarcoCliente extends JFrame {
@@ -29,7 +27,6 @@ class MarcoCliente extends JFrame {
 		add(milamina);
 		setVisible(true);
 	}
-
 }
 
 class LaminaMarcoCliente extends JPanel {
@@ -87,7 +84,6 @@ class LaminaMarcoCliente extends JPanel {
 				System.out.println(e1.getMessage());
 			}
 		}
-		
 	}
 
 	private JTextField campo1,nick,ip;
