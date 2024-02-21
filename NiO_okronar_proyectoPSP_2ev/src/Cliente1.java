@@ -3,13 +3,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 import javax.swing.*;
 
-public class Cliente {
+public class Cliente1 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -29,7 +31,7 @@ class MarcoCliente extends JFrame {
 	}
 }
 
-class LaminaMarcoCliente extends JPanel {
+class LaminaMarcoCliente extends JPanel implements Runnable {
 
 	public LaminaMarcoCliente() {
 		nick = new JTextField(5);
@@ -50,7 +52,9 @@ class LaminaMarcoCliente extends JPanel {
 		miboton.addActionListener(mievento);
 		
 		add(miboton);
-
+		
+		Thread miHilo = new Thread();
+		miHilo.start();
 	}
 	
 	private class EnviarTexto implements ActionListener{
@@ -60,7 +64,7 @@ class LaminaMarcoCliente extends JPanel {
 			
 			try {
 				//Puente para comunicar con el servidor
-				Socket misocket = new Socket("127.0.0.1", 1234);
+				Socket misocket = new Socket("192.168.56.1", 1234);
 				//aqui tenemos la informacion completa del mensaje y el que lo manda en un objeto
 				PaqueteEnvio datos = new PaqueteEnvio();
 				
@@ -89,8 +93,33 @@ class LaminaMarcoCliente extends JPanel {
 	private JTextField campo1,nick,ip;
 	private JTextArea campochat;
 	private JButton miboton;
+	
+	//Run LaminaMarcoCliente
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		try {
+			//Recepcion del servidor por el puerto 9090
+			ServerSocket servidorCliente = new ServerSocket(9090);
+			Socket cliente;
+			PaqueteEnvio paqueteRecibido;
+			
+			while(true) {
+				cliente = servidorCliente.accept();
+				ObjectInputStream flujoEntrada = new ObjectInputStream(cliente.getInputStream());
+				paqueteRecibido = (PaqueteEnvio) flujoEntrada.readObject();
+				//Montamos el objeto recibido
+				campochat.append("\n" + paqueteRecibido.getNick() + ": " + paqueteRecibido.getMensaje());
+				
+			}
+			
+		}catch(Exception e) {
+			
+		}
+	}
 
 }
+
 //lo serializamos para que todas las instancias sean "desmenuzables"
 class PaqueteEnvio implements Serializable{
 	

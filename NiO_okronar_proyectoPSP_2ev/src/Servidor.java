@@ -5,6 +5,7 @@ import java.awt.*;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -52,12 +53,12 @@ class MarcoServidor extends JFrame implements Runnable {
 			
 
 			while (true) {
-
+				//Recepcion del cliente1
 				Socket misocket = servidor.accept();
 
 				ObjectInputStream paquete_datos = new ObjectInputStream(misocket.getInputStream());
 				
-				//montamos el objeto recibido
+				//Montamos el objeto recibido
 				paquete_recibido = (PaqueteEnvio) paquete_datos.readObject();
 				
 				nick = paquete_recibido.getNick();
@@ -65,6 +66,14 @@ class MarcoServidor extends JFrame implements Runnable {
 				mensaje = paquete_recibido.getMensaje();
 				
 				areatexto.append("\n" + nick + ": " + mensaje + " para " + ip);
+				
+				//Envio al cliente2
+				Socket envioDestinatario = new Socket(ip, 9090);
+				ObjectOutputStream paqueteEnvioDestinatario = new ObjectOutputStream(envioDestinatario.getOutputStream());
+				
+				paqueteEnvioDestinatario.writeObject(paquete_recibido);
+				
+				envioDestinatario.close();
 				misocket.close();
 			}
 
