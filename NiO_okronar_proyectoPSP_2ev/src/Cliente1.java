@@ -57,7 +57,7 @@ class LaminaMarcoCliente extends JPanel implements Runnable {
 		
 		add(miboton);
 		
-		Thread miHilo = new Thread();
+		Thread miHilo = new Thread(this);
 		miHilo.start();
 	}
 	
@@ -67,8 +67,6 @@ class LaminaMarcoCliente extends JPanel implements Runnable {
 		public void actionPerformed(ActionEvent e) { 
 			
 			campochat.append("\n" + campo1.getText());
-			campo1.setText(null);
-			
 			try {
 				//Puente para comunicar con el servidor
 				Socket misocket = new Socket("10.5.4.23", 1234);
@@ -76,24 +74,21 @@ class LaminaMarcoCliente extends JPanel implements Runnable {
 				PaqueteEnvio datos = new PaqueteEnvio();
 				
 				datos.setNick(nick.getText());
-				
 				datos.setIp(ip.getText());
-				
 				datos.setMensaje(campo1.getText());
 				
 				//stream del objeto
 				ObjectOutputStream paquete_datos = new ObjectOutputStream(misocket.getOutputStream());
 				paquete_datos.writeObject(datos);
-				misocket.close();
 				
-				//reinicio el campo de texto tras enviarlo
-				campo1.setText("");
+				misocket.close();
 				
 				
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				System.out.println(e1.getMessage());
 			}
+			campo1.setText(null);
 		}
 	}
 	
