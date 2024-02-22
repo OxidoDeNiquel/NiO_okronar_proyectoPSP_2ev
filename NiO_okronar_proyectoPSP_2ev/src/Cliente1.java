@@ -57,7 +57,7 @@ class LaminaMarcoCliente extends JPanel implements Runnable {
 		
 		add(miboton);
 		
-		Thread miHilo = new Thread();
+		Thread miHilo = new Thread(this);
 		miHilo.start();
 	}
 	
@@ -67,7 +67,7 @@ class LaminaMarcoCliente extends JPanel implements Runnable {
 		public void actionPerformed(ActionEvent e) { 
 			
 			campochat.append("\n" + campo1.getText());
-			campo1.setText(null);
+			// esto lo implemente abajo campo1.setText(null);
 			
 			try {
 				//Puente para comunicar con el servidor
@@ -117,7 +117,7 @@ class LaminaMarcoCliente extends JPanel implements Runnable {
 			}
 			
 		}catch(Exception e) {
-			
+			System.out.println(e.getMessage());
 		}
 	}
 
