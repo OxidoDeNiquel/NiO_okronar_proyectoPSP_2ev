@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.*;
 
 public class Servidor {
 
@@ -39,54 +40,84 @@ class MarcoServidor extends JFrame implements Runnable {
 		Thread miHilo = new Thread(this);
 		miHilo.start();
 
-	} 
+	}
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		try {
 			ServerSocket servidor = new ServerSocket(1234);
-			
+
 			String nick, ip, mensaje;
 			
-			PaqueteEnvio paquete_recibido;
+			//creamos un array list para almacenar las ips de los usuarios conectados
 			
+			ArrayList <String> listaIp = new ArrayList<String>();
+
+			//lo metemos en el paquete(despues de modificar la clase)
+			PaqueteEnvio paquete_recibido;
 
 			while (true) {
-				//Recepcion del cliente1
+				// Recepcion del cliente1
 				Socket misocket = servidor.accept();
 
 				ObjectInputStream paquete_datos = new ObjectInputStream(misocket.getInputStream());
-				
-				//Montamos el objeto recibido
+
+				// Montamos el objeto recibido
 				paquete_recibido = (PaqueteEnvio) paquete_datos.readObject();
-				
+
 				nick = paquete_recibido.getNick();
 				ip = paquete_recibido.getIp();
 				mensaje = paquete_recibido.getMensaje();
-				
-				if(!mensaje.equals(" online")) {
-				
-				areatexto.append("\n" + nick + ": " + mensaje + " para " + ip);
-				
-				//Envio al cliente2
-				Socket envioDestinatario = new Socket(ip, 9090);
-				ObjectOutputStream paqueteEnvioDestinatario = new ObjectOutputStream(envioDestinatario.getOutputStream());
-				
-				paqueteEnvioDestinatario.writeObject(paquete_recibido);
-				
-				paqueteEnvioDestinatario.close();
-				envioDestinatario.close();
-				misocket.close();
-				
-				}else {
-					
-					//--- DETECTA USUARIOS ONLINE ---//
+
+				if (!mensaje.equals(" online")) {
+
+					areatexto.append("\n" + nick + ": " + mensaje + " para " + ip);
+
+					// Envio al cliente2
+					Socket envioDestinatario = new Socket(ip, 9090);
+					ObjectOutputStream paqueteEnvioDestinatario = new ObjectOutputStream(
+							envioDestinatario.getOutputStream());
+
+					paqueteEnvioDestinatario.writeObject(paquete_recibido);
+
+					paqueteEnvioDestinatario.close();
+					envioDestinatario.close();
+					misocket.close();
+
+				} else {
+
+					// --- DETECTA USUARIOS ONLINE ---//
 					InetAddress localizador = misocket.getInetAddress();
 					String ipRemota = localizador.getHostAddress();
-					
+ 
 					System.out.println("Online " + ipRemota);
-					//------------------------------//
+					
+					//cuando se conecta un usuario se almacena en el array
+										
+					listaIp.add(ipRemota);
+					
+					paquete_recibido.setIps(listaIp); 
+					
+					
+					for (String s : listaIp) {
+						
+						
+						System.out.println("Array: " + s);
+						Socket envioDestinatario = new Socket(s, 9090);
+						ObjectOutputStream paqueteEnvioDestinatario = new ObjectOutputStream(
+								envioDestinatario.getOutputStream());
+
+						paqueteEnvioDestinatario.writeObject(paquete_recibido);
+
+						paqueteEnvioDestinatario.close();
+						envioDestinatario.close();
+						misocket.close();
+						
+					}
+					
+					
+					// ------------------------------//
 				}
 			}
 
@@ -97,5 +128,5 @@ class MarcoServidor extends JFrame implements Runnable {
 	}
 
 	private JTextArea areatexto;
-	
-}
+
+  }

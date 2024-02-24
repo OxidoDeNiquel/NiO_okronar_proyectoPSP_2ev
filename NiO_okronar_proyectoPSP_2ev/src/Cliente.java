@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -77,10 +78,12 @@ class LaminaMarcoCliente extends JPanel implements Runnable {
 		add(texto);
 		
 		ip = new JComboBox();
+		/*
+		 * comento esto de momento
 		
 		ip.addItem("Usuario 1");
 		ip.addItem("Usuario 2");
-		ip.addItem("Usuario 3");
+		ip.addItem("Usuario 3");*/
 		add (ip);
 		
 		campochat = new JTextArea(12,20);
@@ -121,7 +124,7 @@ class LaminaMarcoCliente extends JPanel implements Runnable {
 				paquete_datos.writeObject(datos);
 				
 				misocket.close();
-				
+		 		
 				
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
@@ -136,17 +139,45 @@ class LaminaMarcoCliente extends JPanel implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		try {
-			//Recepcion del servidor por el puerto 9090
+			//Recepcion del servidor por  el puerto 9090
 			ServerSocket servidorCliente = new ServerSocket(9090);
 			Socket cliente;
 			PaqueteEnvio paqueteRecibido;
 			
 			while(true) {
 				cliente = servidorCliente.accept();
+				
 				ObjectInputStream flujoEntrada = new ObjectInputStream(cliente.getInputStream());
+				
 				paqueteRecibido = (PaqueteEnvio) flujoEntrada.readObject();
-				//Montamos el objeto recibido
+				
+				if(!paqueteRecibido.getMensaje().equals("online")){
+					
+					//Montamos el objeto recibido
 				campochat.append("\n" + paqueteRecibido.getNick() + ": " + paqueteRecibido.getMensaje());
+					
+				}else {
+					
+					// campochat.append("\n "+paqueteRecibido.getIps());
+					
+					//metemos las ips de los clientes en el combo box
+					ArrayList<String> IpsMenu = new ArrayList<String>();
+					IpsMenu = paqueteRecibido.getIps();
+					
+					
+					//borramos el combobox antes de rellenarlo
+					ip.removeAllItems();
+					
+					for (String z : IpsMenu) {
+						
+						ip.addItem(z);
+						
+					}
+				}
+				
+				
+				
+				
 				
 			}
 			
@@ -161,6 +192,17 @@ class LaminaMarcoCliente extends JPanel implements Runnable {
 class PaqueteEnvio implements Serializable{
 	
 	private String nick,ip,mensaje;
+	private ArrayList<String> Ips;
+	
+	
+
+	public ArrayList<String> getIps() {
+		return Ips;
+	}
+
+	public void setIps(ArrayList<String> ips) {
+		Ips = ips;
+	}
 
 	public String getNick() {
 		return nick;
