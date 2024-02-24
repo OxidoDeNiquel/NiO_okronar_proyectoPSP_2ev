@@ -5,6 +5,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -64,6 +65,8 @@ class MarcoServidor extends JFrame implements Runnable {
 				ip = paquete_recibido.getIp();
 				mensaje = paquete_recibido.getMensaje();
 				
+				if(!mensaje.equals(" online")) {
+				
 				areatexto.append("\n" + nick + ": " + mensaje + " para " + ip);
 				
 				//Envio al cliente2
@@ -75,6 +78,16 @@ class MarcoServidor extends JFrame implements Runnable {
 				paqueteEnvioDestinatario.close();
 				envioDestinatario.close();
 				misocket.close();
+				
+				}else {
+					
+					//--- DETECTA USUARIOS ONLINE ---//
+					InetAddress localizador = misocket.getInetAddress();
+					String ipRemota = localizador.getHostAddress();
+					
+					System.out.println("Online " + ipRemota);
+					//------------------------------//
+				}
 			}
 
 		} catch (IOException | ClassNotFoundException e) {
