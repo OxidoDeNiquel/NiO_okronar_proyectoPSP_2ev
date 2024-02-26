@@ -39,7 +39,7 @@ class MarcoCliente extends JFrame {
 class EnvioOnline extends WindowAdapter{
 	public void windowOpened(WindowEvent e) {
 		try {
-			Socket socket = new Socket("10.5.4.23", 9999);
+			Socket socket = new Socket("10.5.4.23", 1234);
 			
 			PaqueteEnvio datos = new PaqueteEnvio();
 			datos.setMensaje("online");
