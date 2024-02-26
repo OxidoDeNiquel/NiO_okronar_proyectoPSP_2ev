@@ -42,11 +42,12 @@ class EnvioOnline extends WindowAdapter{
 			Socket socket = new Socket("10.5.4.23", 1234);
 			
 			PaqueteEnvio datos = new PaqueteEnvio();
-			datos.setMensaje("online");
+			datos.setMensaje(" online");
 			
 			ObjectOutputStream paqueteDatos = new ObjectOutputStream(socket.getOutputStream());
 			
 			paqueteDatos.writeObject(datos);
+			paqueteDatos.close();
 			
 			socket.close();
 			
@@ -130,7 +131,7 @@ class LaminaMarcoCliente extends JPanel implements Runnable {
 				// TODO Auto-generated catch block
 				System.out.println(e1.getMessage());
 			}
-			campo1.setText(null);
+			campo1.setText("");
 		}
 	}
 	
