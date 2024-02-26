@@ -39,7 +39,7 @@ class MarcoCliente extends JFrame {
 class EnvioOnline extends WindowAdapter{
 	public void windowOpened(WindowEvent e) {
 		try {
-			Socket socket = new Socket("10.5.4.254", 1234);
+			Socket socket = new Socket("10.5.4.23", 1234);
 			
 			PaqueteEnvio datos = new PaqueteEnvio();
 			datos.setMensaje("online");
@@ -151,7 +151,7 @@ class LaminaMarcoCliente extends JPanel implements Runnable {
 				
 				paqueteRecibido = (PaqueteEnvio) flujoEntrada.readObject();
 				
-				if(!paqueteRecibido.getMensaje().equals("online")){
+				if(!paqueteRecibido.getMensaje().equals(" online")){
 					
 					//Montamos el objeto recibido
 				campochat.append("\n" + paqueteRecibido.getNick() + ": " + paqueteRecibido.getMensaje());
@@ -174,13 +174,7 @@ class LaminaMarcoCliente extends JPanel implements Runnable {
 						
 					}
 				}
-				
-				
-				
-				
-				
 			}
-			
 		}catch(Exception e) {
 			
 		}
