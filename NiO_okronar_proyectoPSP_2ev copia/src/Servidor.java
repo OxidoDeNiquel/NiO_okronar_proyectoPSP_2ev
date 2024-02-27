@@ -1,8 +1,6 @@
 import javax.swing.*;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -24,89 +22,26 @@ public class Servidor {
 	}
 }
 
-class EncriptarTextoServidor implements ActionListener{
-	private JTextArea areatexto;
-
-    // Constructor que recibe la referencia al JTextArea
-    public EncriptarTextoServidor(JTextArea areatexto) {
-        this.areatexto = areatexto;
-    }
-    
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		System.out.println("Encriptando...");
-		String mensajeOriginal = areatexto.getText();
-        String mensajeEncriptado = AESCrypt.encrypt(mensajeOriginal);
-        
-
-        // Guardar el mensaje encriptado en un archivo
-        AESCrypt.saveToFile(mensajeEncriptado, "archivo_encriptado.txt");
-		
-	}
-	
-}
-
-class DesencriptarTextoServidor implements ActionListener{
-	private JTextArea areatexto;
-
-    // Constructor que recibe la referencia al JTextArea
-    public DesencriptarTextoServidor(JTextArea areatexto) {
-        this.areatexto = areatexto;
-    }
-    
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		// Cargar el contenido desencriptado desde el archivo
-		System.out.println("Desencriptando...");
-        String mensajeEncriptado = AESCrypt.loadFromFile("archivo_encriptado.txt");
-        String mensajeDesencriptado = AESCrypt.decrypt(mensajeEncriptado);
-
-        // Mostrar el mensaje desencriptado en el JTextArea
-        if (mensajeDesencriptado != null) {
-            areatexto.setText(mensajeDesencriptado);
-        }
-		
-	}
-	
-}
-
 class MarcoServidor extends JFrame implements Runnable {
-    private JButton botonEncriptar;
-    private JButton botonDesencriptar;
-    private JTextArea areatexto;
 
-    public MarcoServidor() {
-        setBounds(1200, 300, 280, 350);
+	public MarcoServidor() {
 
-        JPanel milamina = new JPanel();
-        milamina.setLayout(new BorderLayout());
+		setBounds(1200, 300, 280, 350);
 
-        areatexto = new JTextArea();
-        milamina.add(new JScrollPane(areatexto), BorderLayout.CENTER);
-        add(milamina);
+		JPanel milamina = new JPanel();
+		milamina.setLayout(new BorderLayout());
 
-        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		areatexto = new JTextArea();
+		milamina.add(areatexto, BorderLayout.CENTER);
+		add(milamina);
 
-        botonEncriptar = new JButton("Guardar");
-        EncriptarTextoServidor actionEncriptar = new EncriptarTextoServidor(areatexto);
-        botonEncriptar.addActionListener(actionEncriptar);
-        panelBotones.add(botonEncriptar);
+		setVisible(true);
 
-        botonDesencriptar = new JButton("Importar");
-        DesencriptarTextoServidor actionDesencriptar = new DesencriptarTextoServidor(areatexto);
-        botonDesencriptar.addActionListener(actionDesencriptar);
-        panelBotones.add(botonDesencriptar);
+		Thread miHilo = new Thread(this);
+		miHilo.start();
 
-        add(panelBotones, BorderLayout.SOUTH);
+	}
 
-        setVisible(true);
-
-        Thread miHilo = new Thread(this);
-        miHilo.start();
-    }
-	
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
@@ -191,5 +126,7 @@ class MarcoServidor extends JFrame implements Runnable {
 			System.out.println(e.getMessage());
 		}
 	}
+
+	private JTextArea areatexto;
 
   }
