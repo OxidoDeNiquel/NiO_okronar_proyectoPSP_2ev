@@ -47,30 +47,24 @@ public class AESCrypt {
 	}
 
 
-    public static void saveToFile(String content, String fileName) {
-    	try {
+	public static void saveToFile(String content, String fileName) {
+		try {
             Path path = Paths.get(fileName);
-
-            // Si el archivo no existe, créalo
-            if (!Files.exists(path)) {
-                Files.createFile(path);
-            }
-
-            // Agregar el contenido al final del archivo
-            Files.write(path, content.getBytes(), StandardOpenOption.APPEND);
-
+            Files.write(path, content.getBytes());
             System.out.println("Mensaje encriptado guardado en el archivo: " + fileName);
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+	}
+
     
     public static String loadFromFile(String fileName) {
-        try {
+    	try {
             Path path = Paths.get(fileName);
             List<String> lines = Files.readAllLines(path);
             if (!lines.isEmpty()) {
                 String encryptedContent = lines.get(0);
+                System.out.println("Contenido del archivo: " + encryptedContent);
                 return decrypt(encryptedContent);
             }
         } catch (Exception e) {
@@ -78,4 +72,5 @@ public class AESCrypt {
         }
         return null;
     }
+
 }

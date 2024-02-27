@@ -60,8 +60,7 @@ class DesencriptarTextoServidor implements ActionListener{
 		// TODO Auto-generated method stub
 		// Cargar el contenido desencriptado desde el archivo
 		System.out.println("Desencriptando...");
-        String mensajeEncriptado = AESCrypt.loadFromFile("archivo_encriptado.txt");
-        String mensajeDesencriptado = AESCrypt.decrypt(mensajeEncriptado);
+        String mensajeDesencriptado = AESCrypt.loadFromFile("archivo_encriptado.txt");
 
         // Mostrar el mensaje desencriptado en el JTextArea
         if (mensajeDesencriptado != null) {
