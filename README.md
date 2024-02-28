@@ -28,8 +28,8 @@ TurboChat es una aplicación de chat en Java desarrollada con Eclipse. Permite a
 
 ## Uso
 
-Ejecuta el servidor TurboChat.
-Ejecuta uno o varios clientes TurboChat.
-Selecciona un usuario disponible en la lista de usuarios en línea.
-¡Comienza a chatear!
+- Ejecuta el servidor TurboChat.
+- Ejecuta uno o varios clientes TurboChat.
+- Selecciona un usuario disponible en la lista de usuarios en línea.
+- ¡Comienza a chatear!
 
