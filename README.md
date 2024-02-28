@@ -20,7 +20,7 @@ TurboChat es una aplicación de chat en Java desarrollada con Eclipse. Permite a
 1. Clona el repositorio en tu máquina local:
 
    ```bash
-   git clone https://github.com/tu-usuario/turbochat.git
+   git clone https://github.com/OxidoDeNiquel/NiO_okronar_proyectoPSP_2ev.git
    
 2. Abre Eclipse y selecciona File -> Open Projects from File System....
 3. Selecciona el directorio del proyecto clonado.
